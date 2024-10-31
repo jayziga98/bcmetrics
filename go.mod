@@ -1,4 +1,4 @@
-module cpu_time
+module bcmetrics
 
 go 1.22.0
 
