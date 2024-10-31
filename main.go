@@ -16,7 +16,7 @@ func now() time.Duration {
 	return time.Duration(ts.Nano())
 }
 
-type Gauge interface {
+type Metric interface {
 	Start()
 	Stop()
 	Reset()
@@ -55,33 +55,33 @@ func (c *CpuTime) Report(b *testing.B) {
 }
 
 type Collector struct {
-	gauges []Gauge
+	metrics []Metric
 }
 
-func (c *Collector) AddGauges(gauges ...Gauge) {
-	c.gauges = append(c.gauges, gauges...)
+func (c *Collector) AddGauges(metrics ...Metric) {
+	c.metrics = append(c.metrics, metrics...)
 }
 
 func (c *Collector) Start() {
-	for _, g := range c.gauges {
+	for _, g := range c.metrics {
 		g.Start()
 	}
 }
 
 func (c *Collector) Stop() {
-	for _, g := range c.gauges {
+	for _, g := range c.metrics {
 		g.Stop()
 	}
 }
 
 func (c *Collector) Reset() {
-	for _, g := range c.gauges {
+	for _, g := range c.metrics {
 		g.Reset()
 	}
 }
 
 func (c *Collector) Report(b *testing.B) {
-	for _, g := range c.gauges {
+	for _, g := range c.metrics {
 		g.Report(b)
 	}
 }
