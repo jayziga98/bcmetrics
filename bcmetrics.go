@@ -21,6 +21,10 @@ type Collectible struct {
 	unit string
 }
 
+func (c *Collectible) Values() (float64, string) {
+	return c.n, c.unit
+}
+
 type Metric interface {
 	Start()
 	Stop()
