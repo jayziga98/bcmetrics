@@ -1,4 +1,4 @@
-package main
+package bcmetrics
 
 import (
 	"golang.org/x/sys/unix"
