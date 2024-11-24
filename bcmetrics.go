@@ -25,7 +25,7 @@ type Metric interface {
 	Start()
 	Stop()
 	Reset()
-	Collect() Collectible
+	Collect(b *testing.B) Collectible
 }
 
 type CpuTime struct {
