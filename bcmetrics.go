@@ -16,20 +16,11 @@ func now() time.Duration {
 	return time.Duration(ts.Nano())
 }
 
-type Collectible struct {
-	n    float64
-	unit string
-}
-
-func (c *Collectible) Values() (float64, string) {
-	return c.n, c.unit
-}
-
 type Metric interface {
 	Start()
 	Stop()
 	Reset()
-	Collect(b *testing.B) Collectible
+	Report(b *testing.B)
 }
 
 type CpuTime struct {
@@ -59,8 +50,8 @@ func (c *CpuTime) Reset() {
 	c.duration = 0
 }
 
-func (c *CpuTime) Collect(b *testing.B) Collectible {
-	return Collectible{float64(c.duration.Nanoseconds()) / float64(b.N), unit}
+func (c *CpuTime) Report(b *testing.B) {
+	b.ReportMetric(float64(c.duration.Nanoseconds())/float64(b.N), unit)
 }
 
 type Collector struct {
@@ -89,10 +80,8 @@ func (c *Collector) Reset() {
 	}
 }
 
-func (c *Collector) Collect(b *testing.B) []Collectible {
-	collectibles := make([]Collectible, len(c.metrics))
-	for idx, m := range c.metrics {
-		collectibles[idx] = m.Collect(b)
+func (c *Collector) Report(b *testing.B) {
+	for _, m := range c.metrics {
+		m.Report(b)
 	}
-	return collectibles
 }
