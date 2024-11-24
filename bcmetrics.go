@@ -85,10 +85,10 @@ func (c *Collector) Reset() {
 	}
 }
 
-func (c *Collector) Collect() []Collectible {
+func (c *Collector) Collect(b *testing.B) []Collectible {
 	collectibles := make([]Collectible, len(c.metrics))
 	for idx, m := range c.metrics {
-		collectibles[idx] = m.Collect()
+		collectibles[idx] = m.Collect(b)
 	}
 	return collectibles
 }
